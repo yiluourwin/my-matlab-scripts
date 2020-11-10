@@ -1,1 +1,2 @@
-# my_matlab_scripts
+# my-matlab-scripts
+Some simple scripts written in matlab
