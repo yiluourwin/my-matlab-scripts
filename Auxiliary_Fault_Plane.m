@@ -4,7 +4,8 @@
 % Author: Yi LUO
 % Built: 18/11/21 11:00
 % -------------------------------------------
-% First 3 input arguments are required. Default isdegree=1. 
+% First 3 input arguments are required. Default isdegree=1.
+%  
 % -------------------------------------------
 
 function [phi2,sigma2,lambda2]=Auxiliary_Fault_Plane(phi,sigma,lambda,isdegree)
