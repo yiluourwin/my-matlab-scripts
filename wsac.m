@@ -6,7 +6,7 @@ function [ ] = wsac( sachd, sacdata, sacfile )
 % before used for imksac, e.g. delta must be set)
 % author: taokai@pku.edu.cn (any suggestion is appreciated)
 
-
+% function of dist, az, baz and gcarc modified by LY
 
 %%
 %    Default byte-order
@@ -232,35 +232,38 @@ fclose(fid);
     end
 
     function [dist, az, baz, gcarc] = ical(stla,stlo,evla,evlo)
-        R_earth = 6371.009; % mean earth's radius(km)
-        radperdeg = pi/180;
-        degperrad = 180/pi;
-        n_st = [cos(stlo*radperdeg), sin(stlo*radperdeg), sin(stla*radperdeg)];
-        n_ev = [cos(evlo*radperdeg), sin(evlo*radperdeg), sin(evla*radperdeg)];
-        n_north = [0 0 1];
-        
-        % calculate epidistance:
-        dist = acos(dot(n_st,n_ev))*R_earth;
-        % calculate great circle arc:
-        gcarc = acos(dot(n_st,n_ev))*degperrad;
-        % calculate azimuth:
-        evrotnorth = cross(n_ev,n_north);
-        evrotst = cross(n_ev,n_st);
-        az_pi = acos(dot(evrotnorth,evrotst));
-        if dot(cross(evrotnorth,n_ev),evrotst)>0
-            az = az_pi*degperrad;
-        else
-            az = (2*pi-az_pi)*degperrad;
-        end
-        % calculate back-azimuth:
-        strotnorth = cross(n_st,n_north);
-        strotev = cross(n_st,n_ev);
-        baz_pi = acos(dot(strotnorth,strotev));
-        if dot(cross(strotnorth,n_st),strotev)>0
-            baz = baz_pi*degperrad;
-        else
-            baz = (2*pi-baz_pi)*degperrad;
-        end
+        [gcarc,baz]=distance(stla,stlo,evla,evlo);
+        [~,az]=distance(stla,stlo,evla,evlo);
+        dist=6371.009*gcarc/180*pi;
+%         R_earth = 6371.009; % mean earth's radius(km)
+%         radperdeg = pi/180;
+%         degperrad = 180/pi;
+%         n_st = [cos(stlo*radperdeg), sin(stlo*radperdeg), sin(stla*radperdeg)];
+%         n_ev = [cos(evlo*radperdeg), sin(evlo*radperdeg), sin(evla*radperdeg)];
+%         n_north = [0 0 1];
+%         
+%         % calculate epidistance:
+%         dist = acos(dot(n_st,n_ev))*R_earth;
+%         % calculate great circle arc:
+%         gcarc = acos(dot(n_st,n_ev))*degperrad;
+%         % calculate azimuth:
+%         evrotnorth = cross(n_ev,n_north);
+%         evrotst = cross(n_ev,n_st);
+%         az_pi = acos(dot(evrotnorth,evrotst));
+%         if dot(cross(evrotnorth,n_ev),evrotst)>0
+%             az = az_pi*degperrad;
+%         else
+%             az = (2*pi-az_pi)*degperrad;
+%         end
+%         % calculate back-azimuth:
+%         strotnorth = cross(n_st,n_north);
+%         strotev = cross(n_st,n_ev);
+%         baz_pi = acos(dot(strotnorth,strotev));
+%         if dot(cross(strotnorth,n_st),strotev)>0
+%             baz = baz_pi*degperrad;
+%         else
+%             baz = (2*pi-baz_pi)*degperrad;
+%         end
     end
 
 end
